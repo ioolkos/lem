@@ -200,6 +200,7 @@
                "lem-base16-themes"
                #+sbcl
                "lem-elixir-mode"
+               "lem-erlang-mode"
                "lem-documentation-mode"
                "lem-elisp-mode"))
 
