@@ -13,8 +13,9 @@
   (uiop:native-namestring "~/tmp/elp.log"))
 
 (defvar *lsp-erlang-server-command*
-  `(,*lsp-erlang-elp-erlang-ls-path*
+  `(,*lsp-erlang-elp-server-path*
     "server"
+   ; "--sub-server-cmd" ,*lsp-erlang-elp-erlang-ls-path*
     "--log-file" ,*lsp-erlang-elp-log-path*
     "--no-log-buffering")
     )
@@ -27,7 +28,7 @@
   :readme-url "https://github.com/WhatsApp/erlang-language-platform"
   :connection-mode :stdio)
 
-(setf (lem-lsp-mode/spec:spec-command
-       (lem-lsp-mode/spec:get-language-spec 'lem-erlang-mode:erlang-mode))
-      '("/home/afa/Applications/elp" "server" "--log-file" "/home/afa/tmp/elp.log" "--no-log-buffering"))
-      ;*lsp-erlang-server-command*)
+;(setf (lem-lsp-mode/spec:spec-command
+;       (lem-lsp-mode/spec:get-language-spec 'lem-erlang-mode:erlang-mode))
+;      '("/home/afa/Applications/elp" "server" "--log-file" "/home/afa/tmp/elp.log" "--no-log-buffering"))
+;      ;*lsp-erlang-server-command*)

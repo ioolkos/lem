@@ -437,24 +437,27 @@
      :syntax-table *erlang-syntax-table*
      :mode-hook *erlang-mode-hook*)
   (setf (variable-value 'enable-syntax-highlight) t
-        (variable-value 'indent-tabs-mode) nil
+        (variable-value 'calc-indent-function) 'calc-indent
+        (variable-value 'indent-tabs-mode) t
         (variable-value 'tab-width) 4
         (variable-value 'line-comment) "%"
         (variable-value 'beginning-of-defun-function) 'beginning-of-defun
         (variable-value 'end-of-defun-function) 'end-of-defun))
 
 (defun beginning-of-defun (point n)
-  (loop :with regex = "^ *def(?:callback|delegate|exception|guardp?|impl|m(?:acrop?|odule)|overridable|p(?:rotocol)?|struct)?"
+  (loop :with regex = "^[a-z_\-]+\([A-Za-z\s\S_]*\)\s*->"
         :repeat n 
         :do (search-backward-regexp point regex)))
-
 
 (defun end-of-defun (point n)
   (with-point ((p point))
     (loop :repeat n
           :do (line-offset p 1)
-              (unless (search-forward-regexp p "^  end") (return)))
+              (unless (search-forward-regexp p "$[\).]|$[\);]") (return)))
     (line-start p)
     (move-point point p)))
 
 (define-file-type ("erl" "hrl" "erlang") erlang-mode)
+
+(defun calc-indent(point) 
+    (line-start point) (variable-value 'tab-width))
