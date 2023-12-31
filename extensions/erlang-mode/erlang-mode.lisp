@@ -370,22 +370,23 @@
      (:greedy-repetition 1 nil :whitespace-char-class)
      :whitespace-char-class :end-anchor #\( #\))))
 
+; custom attributes
+
+(define-attribute syntax-guard-attribute
+  (:light :foreground "#00875f")
+  (:dark :foreground "SpringGreen"))
+
 (defun make-tmlanguage-erlang ()
   (let* ((patterns (make-tm-patterns
-
                     (make-tm-match
                               "%[+-]"
                               :name 'syntax-comment-attribute)
-
-                  
-                    (make-tm-match "\\b([A-Z]|_)[A-Za-z0-9_-]+\\b"
+                    (make-tm-match "[\\b]*[A-Z]+[A-Za-z0-9_-]+"
                                       :name 'syntax-variable-attribute)
-                    (make-tm-match ":\\w+" 
-                                   :name 'syntax-constant-attribute) 
-                    (make-tm-match "\\w+:"
-                                   :name 'syntax-constant-attribute)
+                    (make-tm-match "[\\b]*[\?]+[\\w]+\\b"
+                                      :name 'syntax-constant-attribute)
                     (make-tm-line-comment-region "%")
-                    (make-tm-string-region "\"")
+                    (make-tm-string-region "\"")  
                     (make-tm-string-region "'")
                     (make-tm-string-region "\"\"\"")
                     (make-tm-match (tokens :word-boundary 
@@ -397,13 +398,11 @@
                     (make-tm-match
                     `(:sequence
                       "-" ,(lem-lisp-mode/grammar::wrap-symbol-names 
-                      "module" "behaviour" "behavior" "export" "define" "record" "type" "include" "include_lib" "spec"))
+                      "module" "behaviour" "behavior" "export" "export_type" "define" "record" "type" "include" "include_lib" "spec"))
                     :captures (vector nil (make-tm-name 'syntax-keyword-attribute)))
-
-                    (make-tm-match "\\b^[a-z][a-z_-]+\\("
-                                     :name 'syntax-function-name-attribute)
-
-                    (make-tm-match (tokens :word-boundary *erlang-guards*)
+                    (make-tm-match "^[\n]*[a-z_]+"
+                          :name 'syntax-function-name-attribute)                    
+                    (make-tm-match (tokens :word-boundary (append '("when") *erlang-guards*))
                                     :name 'syntax-guard-attribute)
                     (make-tm-match (tokens :word-boundary *erlang-int-bifs*)
                                     :name 'syntax-builtin-attribute)
