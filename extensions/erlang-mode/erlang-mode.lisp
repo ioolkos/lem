@@ -381,7 +381,7 @@
                     (make-tm-match
                               "%[+-]"
                               :name 'syntax-comment-attribute)
-                    (make-tm-match "[\\b]*[A-Z]+[A-Za-z0-9_-]+"
+                    (make-tm-match "[\\b]*[A-Z]+[A-Za-z0-9_-]*"
                                       :name 'syntax-variable-attribute)
                     (make-tm-match "[\\b]*[\?]+[\\w]+\\b"
                                       :name 'syntax-constant-attribute)
