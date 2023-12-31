@@ -437,7 +437,7 @@
      :syntax-table *erlang-syntax-table*
      :mode-hook *erlang-mode-hook*)
   (setf (variable-value 'enable-syntax-highlight) t
-        (variable-value 'calc-indent-function) 'calc-indent
+        (variable-value 'calc-indent-function) 'erlang-calc-indent
         (variable-value 'indent-tabs-mode) t
         (variable-value 'tab-width) 4
         (variable-value 'line-comment) "%"
@@ -457,7 +457,11 @@
     (line-start p)
     (move-point point p)))
 
-(define-file-type ("erl" "hrl" "erlang") erlang-mode)
+(define-file-type ("erl" "hrl") erlang-mode)
 
-(defun calc-indent(point) 
-    (line-start point) (variable-value 'tab-width))
+; as in markdown mode
+(defun erlang-calc-indent (point)
+  (with-point ((point point))
+    (let ((tab-width (variable-value 'tab-width :default point))
+          (column (point-column point)))
+      (+ column (- tab-width (rem column tab-width))))))
